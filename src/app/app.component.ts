@@ -4,7 +4,6 @@ import {jwtToken} from "./globals";
 import {AsyncPipe, NgClass, NgIf} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AuthService} from "./services/auth.service";
-import {environment} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +14,7 @@ import {environment} from '../environments/environment';
 })
 export class AppComponent {
   title = 'NAFF - Newsletter am K.A.F.F.';
-  loggedIn$ = jwtToken;
+  loggedIn = jwtToken;
   credentials: {username: string; password: string};
 
   constructor(
@@ -28,13 +27,11 @@ export class AppComponent {
     }
   }
 
-  login() {
-    this.backend.login(this.credentials);
+  async login() {
+    await this.backend.login(this.credentials);
   }
 
   logout() {
     jwtToken.next(null);
   }
-
-  protected readonly environment = environment;
 }

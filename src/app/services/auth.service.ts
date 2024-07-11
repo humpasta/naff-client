@@ -1,24 +1,26 @@
 import {Injectable} from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {environment} from '../../environments/environment';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {jwtToken} from '../globals';
-import localForage from 'localforage';
 import {firstValueFrom, map} from 'rxjs';
+import {SettingsService} from './settings.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) {
-    localForage.getItem('tokenObj').then((tokenObj: any) => {
+  constructor(
+    private http: HttpClient,
+    private settings: SettingsService
+  ) {
+    this.settings.get('tokenObj').then(async (tokenObj: any) => {
       if (tokenObj) {
         const now = new Date();
         if (tokenObj.accessTokenExpiresAt > now) {
           jwtToken.next(tokenObj);
         } else {
           if (tokenObj.refreshTokenExpiresAt > now) {
-            this.refresh(tokenObj);
+            await this.refresh(tokenObj);
           }
         }
       }
@@ -34,20 +36,21 @@ export class AuthService {
       })
     ).subscribe(async tokenObj => {
       if (tokenObj) {
-        await localForage.setItem('tokenObj', tokenObj);
+        await this.settings.set('tokenObj', tokenObj);
       } else {
-        await localForage.removeItem('tokenObj');
+        await this.settings.remove('tokenObj');
       }
     });
   }
 
 
-
-  login(credentials: { username: string; password: string }) {
+  async login(credentials: { username: string; password: string }) {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json');
 
-    this.http.post(environment.server_url + '/auth/login', credentials, {headers}).subscribe({
+    const url = await this.settings.get('api-url');
+
+    this.http.post(url + '/auth/login', credentials, {headers}).subscribe({
       next: tokenObj => {
         jwtToken.next(tokenObj);
       },
@@ -57,14 +60,16 @@ export class AuthService {
     });
   }
 
-  refresh(tokenObj: any) {
+  async refresh(tokenObj: any) {
     const now = new Date();
     if (tokenObj.refreshTokenExpiresAt && tokenObj.refreshTokenExpiresAt > now) {
       const headers = new HttpHeaders()
         .append('Content-Type', 'application/json')
         .append('refresh-token', tokenObj.refreshToken);
 
-      this.http.post(environment.server_url + '/auth/refresh', null, {headers}).subscribe({
+      const url = await this.settings.get('api-url');
+
+      this.http.post(url + '/auth/refresh', null, {headers}).subscribe({
         next: tokenObj => {
           jwtToken.next(tokenObj);
         },

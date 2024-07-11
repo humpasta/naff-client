@@ -1,6 +1,6 @@
-<nav *ngIf="loggedIn$ | async" class="navbar" role="navigation" aria-label="main navigation">
+<nav *ngIf="loggedIn | async" class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <a class="navbar-item" href="{{environment.frontend_url}}">
+    <a class="navbar-item" href="/">
 
       <svg class="naff-logo"
         width="42.441231mm"
@@ -52,7 +52,7 @@
   </div>
 </nav>
 
-<ng-container *ngIf="loggedIn$ | async; else loginForm">
+<ng-container *ngIf="loggedIn | async; else loginForm">
   <router-outlet />
 </ng-container>
 
