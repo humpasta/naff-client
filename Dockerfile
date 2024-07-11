@@ -1,13 +1,10 @@
 FROM node:20 as builder
 
-ARG SERVER_NAME="localhost"
-ARG API_URL="http://localhost:3000"
-
 WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
-RUN npx ng build # --configuration production
+RUN npx ng build --configuration production
 
 FROM nginx:stable as runner
 
