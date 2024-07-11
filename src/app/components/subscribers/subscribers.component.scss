@@ -1,0 +1,67 @@
+.table {
+  width: 100%;
+
+  tbody tr:hover {
+    cursor: pointer;
+  }
+
+  .buttons {
+    justify-content: flex-end;
+  }
+
+  tr.is-selected {
+    color: var(--bulma-table-color);
+    background-color: var(--bulma-background);
+  }
+}
+
+.column-index {
+  width: 20px;
+  vertical-align: middle;
+  text-align: right;
+}
+
+.column-email {
+  width: 300px;
+}
+
+.operations {
+  display: flex;
+  justify-content: end;
+}
+
+.message {
+  position: absolute;
+  height: 400px;
+  width: 400px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+
+  .buttons {
+    justify-content: flex-end;
+    margin-top: 15px;
+  }
+
+  .input {
+    margin: 15px 0 5px;
+  }
+}
+
+.search-bar {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: stretch;
+
+  .field {
+    flex: 1;
+  }
+
+  .button {
+    width: 50px;
+    height: 40px;
+  }
+}

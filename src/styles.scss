@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+.main {
+  padding: 20px;
+}
+
+.is-fab {
+  width: 100%;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
+
+.has-content-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.naff-logo {
+  fill: var(--bulma-primary);
+}
+
+//@media (prefers-color-scheme: dark) {
+//  .naff-logo {
+//    fill: #fff;
+//  }
+//}

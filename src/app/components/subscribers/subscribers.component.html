@@ -1,0 +1,94 @@
+<div class="main" (click)="setActiveIndex(-1)">
+  <h1 class="title">Liste der Abonnent*innen</h1>
+  <div class="block">
+    Hier können Abonnent*innen hizugefügt, gelöscht oder bearbeitet werden.
+  </div>
+
+  <div class="search-bar">
+    <div class="field">
+      <p class="control has-icons-left">
+        <input class="input" type="text" placeholder="Suchen" [(ngModel)]="searchTerm" (keyup)="filterSubscribers()" />
+        <span class="icon is-small is-left">
+          <i class="fas fa-search"></i>
+        </span>
+      </p>
+    </div>
+    <button class="button is-primary" title="Abonnent*in hinzufügen" (click)="onAddClicked()">
+      <span class="icon">
+        <i class="fas fa-add"></i>
+      </span>
+    </button>
+  </div>
+
+  <table class="table is-fullwidth is-hoverable" *ngIf="filteredSubscribers && filteredSubscribers.length >= 1">
+    <thead>
+    <tr>
+      <th class="column-index">Index</th>
+      <th class="column-email">E-Mail</th>
+      <th></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let subscriber of filteredSubscribers; index as i" [ngClass]="{'is-selected': activeIndex === i}" (click)="onRowClick($event, i)">
+      <td class="column-index"><div>{{ i + 1 }}</div></td>
+      <td class="column-email">
+        <ng-container *ngIf="activeIndex !== i; else editMail">
+          {{subscriber}}
+        </ng-container>
+        <ng-template #editMail>
+          <input #emailIn class="input" type="text" placeholder="E-Mail" [value]="subscriber" (keyup)="setMailEdited(subscriber)" (change)="setMailEdited(subscriber)" />
+        </ng-template>
+      </td>
+      <td class="spacer"></td>
+      <td>
+        <div class="buttons" *ngIf="activeIndex === i">
+          <button class="button is-primary" [disabled]="!mailEdited">
+            <span class="icon is-small">
+              <i class="fas fa-check"></i>
+            </span>
+            <span>Änderungen übernehmen</span>
+          </button>
+          <button class="button is-danger" (click)="onDeleteClicked()">
+            <span class="icon is-small">
+              <i class="fas fa-times"></i>
+            </span>
+            <span>Löschen</span>
+          </button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<article class="message" *ngIf="showDeleteDialog">
+  <div class="message-header">
+    <p>Achtung</p>
+    <button class="delete" aria-label="delete" (click)="cancelDelete()"></button>
+  </div>
+  <div class="message-body">
+    Soll <strong>{{getActiveMail()}}</strong> wirklich gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.
+    <div class="buttons">
+      <button class="button" (click)="cancelDelete()">Abbrechen</button>
+      <button class="button is-danger" (click)="deleteSubscriber()">Löschen</button>
+    </div>
+  </div>
+</article>
+
+<article class="message" *ngIf="showAddDialog">
+  <div class="message-header">
+    <p>Abonnent*in hinzufügen</p>
+    <button class="delete" aria-label="delete" (click)="cancelAdd()"></button>
+  </div>
+  <div class="message-body">
+    In das folgende Feld die E-Mail-Adresse eintragen und <strong>hinzufügen</strong> klicken.
+
+    <input class="input" type="email" placeholder="E-Mail" [(ngModel)]="newSubscriber" />
+
+    <div class="buttons">
+      <button class="button" (click)="cancelAdd()">Abbrechen</button>
+      <button class="button is-primary" (click)="addSubscriber()">Hinzufügen</button>
+    </div>
+  </div>
+</article>

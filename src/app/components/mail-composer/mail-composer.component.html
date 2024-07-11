@@ -1,0 +1,48 @@
+<div class="main" *ngIf="!sent; else newsletterSent">
+  <h1 class="title">Newsletter schreiben</h1>
+  <div class="block">
+    Einfach Betreff und Text in das Formular angeben und auf <b>Absenden</b> klicken um den Newsletter an alle
+    Abonnent*innen zu verschicken.
+  </div>
+
+  <div class="field">
+    <label class="label">Betreff</label>
+    <div class="control">
+      <input #subject class="input" type="email" placeholder="Betreff des Newsletters" [(ngModel)]="newsletter.subject">
+    </div>
+<!--    <p *ngIf="subjectInput" class="help is-danger">Der Betreff fehlt.</p>-->
+  </div>
+
+  <div class="field">
+    <label class="label">Newsletter</label>
+    <div class="control">
+      <textarea #message class="textarea" rows="12" placeholder="Inhalt des Newsletters" [(ngModel)]="newsletter.message"></textarea>
+    </div>
+  </div>
+<!--  <p class="help is-danger">Der Inhalt des Newsletters fehlt.</p>-->
+
+  <div class="field">
+    <label class="label">Signatur</label>
+    <div class="control">
+      <textarea #signature class="textarea" rows="5" placeholder="Die Signatur unter dem Newsletter" [(ngModel)]="newsletter.signature"></textarea>
+    </div>
+  </div>
+
+  <div *ngIf="newsletter.subject !== '' && newsletter.message !== ''" class="is-fab has-content-right">
+    <button class="button is-primary is-rounded" (click)="sendNewsletter()">
+    <span class="icon">
+      <i class="fas fa-paper-plane"></i>
+    </span>
+      <span>Absenden</span>
+    </button>
+  </div>
+</div>
+
+<ng-template #newsletterSent>
+  <div class="centered">
+    <h1 class="title is-centered">Newsletter verschickt</h1>
+    <div class="block is-centered">
+      Der Newsletter wurde verschickt, du kannst dich jetzt abmelden.
+    </div>
+  </div>
+</ng-template>
