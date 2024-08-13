@@ -22,8 +22,8 @@ export class AppComponent {
     public router: Router
   ) {
     this.credentials = {
-      username: 'kaff',
-      password: '#Ln*!N*QnQ29mZL7KLue'
+      username: '',
+      password: ''
     }
   }
 
